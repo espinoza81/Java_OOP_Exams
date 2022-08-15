@@ -77,6 +77,7 @@ public class ControllerImpl implements Controller {
         }
 
         supplement.add(newSupplement);
+        
         return String.format(ConstantMessages.SUCCESSFULLY_ADDED_SUPPLEMENT_TYPE, type);
     }
 
@@ -95,7 +96,7 @@ public class ControllerImpl implements Controller {
             throw new IllegalArgumentException(String.format(ExceptionMessages.NO_SUPPLEMENT_FOUND, supplementType));
         }
 
-        Field field = fields.stream().filter(s -> s.getName().equals(fieldName)).findAny().get();
+        Field field = getField(fieldName);
 
         field.addSupplement(supplementToAdd);
         
@@ -126,7 +127,7 @@ public class ControllerImpl implements Controller {
                 throw new IllegalArgumentException(ExceptionMessages.INVALID_PLAYER_TYPE);
         }
 
-        Field field = fields.stream().filter(s -> s.getName().equals(fieldName)).findAny().get();
+        Field field = getField(fieldName);
 
         if((player.getClass().getSimpleName().equals("Men") && field.getClass().getSimpleName().equals("ArtificialTurf")) ||
                 (player.getClass().getSimpleName().equals("Women") && field.getClass().getSimpleName().equals("NaturalGrass"))) {
@@ -142,7 +143,7 @@ public class ControllerImpl implements Controller {
         //Drag all Player in the Field with the given name.
         //Returns a string with information about how many players were successfully dragged in the following format:
         //"Player drag: {dragCount}"
-        Field field = fields.stream().filter(s -> s.getName().equals(fieldName)).findAny().get();
+        Field field = getField(fieldName);
 
         field.drag();
 
@@ -158,7 +159,7 @@ public class ControllerImpl implements Controller {
         //Return a string in the following format:
         //"The strength of Field {fieldName} is {value}."
 
-        Field field = fields.stream().filter(s -> s.getName().equals(fieldName)).findAny().get();
+        Field field = getField(fieldName);
 
         int sumStrength = field.getPlayers().stream().mapToInt(Player::getStrength).sum();
 
@@ -168,5 +169,9 @@ public class ControllerImpl implements Controller {
     @Override
     public String getStatistics() {
         return fields.stream().map(Field::getInfo).collect(Collectors.joining(System.lineSeparator()));
+    }
+    
+    private Field getField(String fieldName) {
+        return fields.stream().filter(s -> s.getName().equals(fieldName)).findAny().get();
     }
 }
