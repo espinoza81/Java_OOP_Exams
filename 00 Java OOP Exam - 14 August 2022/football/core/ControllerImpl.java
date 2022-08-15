@@ -98,6 +98,8 @@ public class ControllerImpl implements Controller {
         Field field = fields.stream().filter(s -> s.getName().equals(fieldName)).findAny().get();
 
         field.addSupplement(supplementToAdd);
+        
+        supplement.remove(supplementToAdd);
 
         return String.format(ConstantMessages.SUCCESSFULLY_ADDED_SUPPLEMENT_IN_FIELD, supplementType, fieldName);
     }
